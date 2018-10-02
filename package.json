@@ -1,0 +1,21 @@
+{
+  "name": "trongamebackend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV=local ts-node-dev --respawn --transpileOnly ./src/app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^10.11.3",
+    "nodemon": "^1.18.4"
+  },
+  "dependencies": {
+    "@types/ws": "^6.0.1",
+    "typescript": "^3.1.1",
+    "ws": "^6.0.0"
+  }
+}
