@@ -1,4 +1,4 @@
-import {IRoomCreateAction, IRoomJoinAction, ResponseReason, ResponseStatus} from "../actions/Actions";
+import {IAction, IRoomCreateAction, IRoomJoinAction, ResponseReason, ResponseStatus} from "../actions/Actions";
 import Client from "../Client";
 import Room from "./Room";
 import {StatusType} from "../status/Status";
@@ -15,10 +15,10 @@ export default class RoomManager {
 
     async join(action: IRoomJoinAction, client: Client) {
         if (!this._rooms.has(action.name)) {
-            client.sendResponse(ResponseStatus.failed, ResponseReason.noRoomExists);
+            client.sendResponse(action.id, ResponseStatus.failed, ResponseReason.noRoomExists);
             return;
         } else if (client.room) {
-            client.sendResponse(ResponseStatus.failed, ResponseReason.alreadyInARoom);
+            client.sendResponse(action.id, ResponseStatus.failed, ResponseReason.alreadyInARoom);
             return;
         }
 
@@ -28,7 +28,7 @@ export default class RoomManager {
 
         client.room = room;
 
-        client.sendResponse(ResponseStatus.success);
+        client.sendResponse(action.id, ResponseStatus.success);
         client.sendStatus(StatusType.room, room.getStatus());
 
         const data = await room.host.requestFullGamestate();
@@ -38,7 +38,7 @@ export default class RoomManager {
 
     create(action: IRoomCreateAction, client: Client) {
         if (this._rooms.has(action.name)) {
-            client.sendResponse(ResponseStatus.failed, ResponseReason.roomAlreadyExists);
+            client.sendResponse(action.id, ResponseStatus.failed, ResponseReason.roomAlreadyExists);
             return;
         }
 

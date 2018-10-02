@@ -1,6 +1,6 @@
 import WebSocket = require("ws");
 import {
-    Action,
+    Action, IAction,
     IClientInitAction,
     IRoomCreateAction,
     IRoomJoinAction,
@@ -33,7 +33,7 @@ export default class Client {
         this._setupListeners();
     }
 
-    sendResponse(status: ResponseStatus, reason: ResponseReason | null = null) {
+    sendResponse(id: number, status: ResponseStatus, reason: ResponseReason | null = null) {
         this._connection.send(JSON.stringify({
             status: status,
             reason: reason
@@ -92,7 +92,7 @@ export default class Client {
                 }
 
                 if (!this.initialised && jsonMessage.action !== Action.initialise) {
-                    this.sendResponse(ResponseStatus.failed, ResponseReason.clientNotInitialised);
+                    this.sendResponse((<IAction>jsonMessage).id, ResponseStatus.failed, ResponseReason.clientNotInitialised);
                     return;
                 }
 
@@ -134,5 +134,9 @@ export default class Client {
         resolve(message);
 
         this._responsePromises.delete(message.id);
+    }
+
+    isConnected() {
+        return this._connection.readyState === 1;
     }
 }

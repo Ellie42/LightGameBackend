@@ -1,24 +1,22 @@
 import * as WebSocket from "ws";
-import {
-    Action,
-    IClientInitAction,
-    IRoomCreateAction,
-    IRoomJoinAction,
-    ResponseReason,
-    ResponseStatus
-} from "./actions/Actions";
 import RoomManager from "./rooms/RoomManager";
 import Client from "./Client";
 import TestClient, {testClient} from "./client/testclient";
 import ClientManager from "./client/ClientManager";
 
-(async function start(){
-    const server = new WebSocket.Server({port: 4545});
-    const roomManager = RoomManager.createSingleton(server);
+(async function start() {
+    const server = new WebSocket.Server({
+        host: '0.0.0.0',
+        port: 4545,
+        perMessageDeflate: false
+    });
+    RoomManager.createSingleton(server);
     const clientManager = new ClientManager();
 
     server.on('connection', (ws: WebSocket) => {
         const client = new Client(ws);
+
+        console.log('New client connected');
 
         clientManager.add(client);
     });

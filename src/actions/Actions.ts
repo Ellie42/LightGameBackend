@@ -31,7 +31,8 @@ export interface IResponse {
 }
 
 export interface IAction {
-    action: Action
+    action: Action,
+    id: number
 }
 
 export interface IClientInitAction extends IAction {

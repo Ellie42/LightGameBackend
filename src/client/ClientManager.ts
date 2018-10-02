@@ -18,7 +18,9 @@ export default class ClientManager{
                 return client.disconnect();
             }
 
-            client.ping();
+            if(client.isConnected()){
+                client.ping();
+            }
         });
     }
 }

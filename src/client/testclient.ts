@@ -9,6 +9,8 @@ export default class TestClient {
 
     public readonly name: string;
 
+    private _messageId = 0;
+
     constructor(name: string) {
         this.name = name;
     }
@@ -44,15 +46,15 @@ export default class TestClient {
     }
 
     createRoom() {
-        this.connection.send(JSON.stringify({action: Action.roomCreate, name: "qweasd"}));
+        this.connection.send(JSON.stringify({action: Action.roomCreate, name: "qweasd", id: this._messageId++}));
     }
 
     private init() {
-        this.connection.send(JSON.stringify({action: Action.initialise, name: this.name}))
+        this.connection.send(JSON.stringify({action: Action.initialise, name: this.name, id: this._messageId++}))
     }
 
     joinRoom(name: string) {
-        this.connection.send(JSON.stringify({action: Action.roomJoin, name: name}))
+        this.connection.send(JSON.stringify({action: Action.roomJoin, name: name, id: this._messageId++}))
     }
 }
 
